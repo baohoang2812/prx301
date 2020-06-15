@@ -13,6 +13,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -22,6 +26,7 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import prx.constants.SystemConfig;
 
 /**
  *
@@ -30,15 +35,29 @@ import org.xml.sax.SAXException;
 public class XMLUltilities implements Serializable {
 
     //JAXB
-    public static void generateClass(String packageName, String schemaPath, String outputPath) throws SAXException, IOException {
+    //file: schema/ dtd
+    public static void generateClass(String packageName, File file, String outputPath) throws SAXException, IOException {
         SchemaCompiler sc = XJC.createSchemaCompiler();
         sc.forcePackageName(packageName);
-        File schema = new File(schemaPath);
-        InputSource is = new InputSource(schema.toURI().toString());
+        InputSource is = new InputSource(file.toURI().toString());
         sc.parseSchema(is);
         S2JJAXBModel model = sc.bind();
         JCodeModel code = model.generateCode(null, null);
         code.build(new File(outputPath));
+    }
+
+    public static <T> T unmarshall(Class<T> clazz, File xmlFile) throws JAXBException {
+        JAXBContext jaxbContext = JAXBContext.newInstance(clazz);
+        Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+        return clazz.cast(unmarshaller.unmarshal(xmlFile));
+    }
+
+    public static <T> void marshall(T obj, File xmlFile) throws JAXBException {
+        JAXBContext jaxbContext = JAXBContext.newInstance(obj.getClass());
+        Marshaller marshaller = jaxbContext.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_ENCODING, SystemConfig.JAXB_DEFAULT_ENCODING);
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, SystemConfig.JAXB_DEFAULT_FORMATTED_OUTPUT);
+        marshaller.marshal(obj, xmlFile);
     }
 
     //TrAX 
