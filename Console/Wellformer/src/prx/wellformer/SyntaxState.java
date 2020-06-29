@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package wellformer;
+package prx.wellformer;
 
+import prx.constant.CommonConstant;
 import java.util.Arrays;
 import java.util.List;
 

@@ -5,6 +5,7 @@
  */
 package wellformer;
 
+import prx.wellformer.SyntaxWellformer;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;

@@ -7,9 +7,9 @@ package prx.utils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import wellformer.CommonConstant;
-import wellformer.ExpressionConfig;
-import wellformer.SyntaxWellformer;
+import prx.constant.CommonConstant;
+import prx.constant.ExpressionConfig;
+import prx.wellformer.SyntaxWellformer;
 
 /**
  *
