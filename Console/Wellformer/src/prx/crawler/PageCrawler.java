@@ -9,16 +9,15 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
@@ -127,14 +126,16 @@ public class PageCrawler {
         }
     }
 
+    // TODO Test parsePageDetail
     private void parsePageDetail() {
         System.out.println("Parsing Page " + baseURL + " Detail");
         for (String link : pageDetailLinkSet) {
             try {
-
                 String content = preprocessPageContent(link);
                 // TODO apply xslt from HTML to XML
-            } catch (IOException e) {
+                // TODO output of apply is only 1 list items not 1 item/ xml
+                XMLUtils.transformFromString("", content);
+            } catch (IOException | TransformerException e) {
                 System.out.println("!!! Parsing Page Detail ERROR !!!");
                 System.out.println("Page: " + link);
                 System.out.println("Error: " + e.getMessage());

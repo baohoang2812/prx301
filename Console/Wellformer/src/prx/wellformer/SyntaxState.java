@@ -39,6 +39,8 @@ public class SyntaxState {
     public static final char EQ = '=';
     public static final char D_QUOT = '"';
     public static final char S_QUOT = '\'';
+    public static final char QUESTION_MARK = '?';
+    public static final char NEW_LINE = '\n';
 
     //check attribute and tag name 
     private static boolean isStartChar(char c) {
@@ -47,7 +49,7 @@ public class SyntaxState {
 
     private static boolean isNamedChar(char c) {
         return Character.isLetterOrDigit(c) || CommonConstant.HYPHEN == c
-                || CommonConstant.UNDERSCORE == c || CommonConstant.PERIOD == c;
+                || CommonConstant.UNDERSCORE == c || CommonConstant.PERIOD == c || CommonConstant.COLON == c;
     }
 
     public static boolean isStartTagChars(char c) {
@@ -65,8 +67,8 @@ public class SyntaxState {
     public static boolean isTagChars(char c) {
         return isNamedChar(c);
     }
-    public static boolean isSpace(char c){
-        return Character.isSpaceChar(c);
+    public static boolean isSpaceOrLineBreak(char c){
+        return Character.isSpaceChar(c) || NEW_LINE == c;
     }
     // HTML tags without need of close tag
     public static final List<String> INLINE_TAGS = Arrays.asList(

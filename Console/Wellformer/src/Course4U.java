@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 
-
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,27 +21,26 @@ public class Course4U {
      */
     public static void main(String[] args) {
         System.out.println("Crawling data...");
-        System.out.println("Crawling finished...");
         List<String> urlList = new ArrayList();
-        urlList.add("https://www.coursera.org/browse/computer-science");
+        urlList.add("https://www.coursera.org/learn/python");
+        urlList.add("https://www.coursera.org/learn/python-data-analysis");
+        urlList.add("https://www.coursera.org/learn/html");
         String pageContent = null;
         try {
-            for (String page : urlList) {
-                pageContent = HttpUtils.getContent(page);
-                // test output
-                // [BHG] TODO Delete on finish project
-                PrintWriter pw = new PrintWriter("rawPageContent.html");
-                pw.print(pageContent);
-                pw.close();
-                pageContent = TextUtils.refineHtml(pageContent);
-                pw = new PrintWriter("refinedPageContent.html");
-                pw.print(pageContent);
-                pw.close();
+            for (int i = 0; i < urlList.size(); i++) {
+            pageContent = HttpUtils.getContent(urlList.get(i));
+            // test output
+            // [BHG] TODO Delete on finish project
+            PrintWriter pw = new PrintWriter("src/test/courseDetail_" + i + ".html");
+            pageContent = TextUtils.refineHtml(pageContent);
+            pw.print(pageContent);
+            pw.close();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        System.out.println("Crawling finished...");
+
     }
 
-  
 }

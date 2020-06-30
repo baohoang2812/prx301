@@ -66,7 +66,7 @@ public class SyntaxWellformer {
                 case OPEN_TAG_NAME:
                     if (isTagChars(c)) {
                         openTag.append(c);
-                    } else if (isSpace(c)) {
+                    } else if (isSpaceOrLineBreak(c)) {
                         state = TAG_INNER;
 
                         attributes.clear();
@@ -77,7 +77,7 @@ public class SyntaxWellformer {
                     }
                     break;
                 case TAG_INNER:
-                    if (isSpace(c)) {//loop
+                    if (isSpaceOrLineBreak(c)) {//loop
 
                     } else if (isStartAttrChars(c)) {
                         state = ATTR_NAME;
@@ -94,7 +94,7 @@ public class SyntaxWellformer {
                         attrName.append(c);
                     } else if (EQ == c) {
                         state = EQUAL;
-                    } else if (isSpace(c)) {
+                    } else if (isSpaceOrLineBreak(c)) {
                         state = EQUAL_WAIT;
                     } else {// Exception
                         // end tag empty value attribute
@@ -109,7 +109,7 @@ public class SyntaxWellformer {
                     }
                     break;
                 case EQUAL_WAIT:
-                    if (isSpace(c)) {//loop
+                    if (isSpaceOrLineBreak(c)) {//loop
 
                     } else if (EQ == c) {
                         state = EQUAL;
@@ -125,13 +125,13 @@ public class SyntaxWellformer {
                     }
                     break;
                 case EQUAL:
-                    if (isSpace(c)) {//loop
+                    if (isSpaceOrLineBreak(c)) {//loop
 
                     } else if (S_QUOT == c || D_QUOT == c) {
                         quote = c;
                         state = ATTR_VALUE_Q;
                         attrValue.setLength(0);
-                    } else if (!isSpace(c) && GT != c) {
+                    } else if (!isSpaceOrLineBreak(c) && GT != c) {
                         state = ATTR_VALUE_NQ;
 
                         attrValue.setLength(0);
@@ -147,9 +147,9 @@ public class SyntaxWellformer {
                     }
                     break;
                 case ATTR_VALUE_NQ:
-                    if (!isSpace(c) && GT != c) { // loop
+                    if (!isSpaceOrLineBreak(c) && GT != c) { // loop
                         attrValue.append(c);
-                    } else if (isSpace(c)) {
+                    } else if (isSpaceOrLineBreak(c)) {
                         state = TAG_INNER;
                         attributes.put(attrName.toString(), attrValue.toString());
                     } else if (GT == c) {
@@ -174,14 +174,14 @@ public class SyntaxWellformer {
                 case CLOSE_TAG_NAME:
                     if (isTagChars(c)) {
                         closeTag.append(c);
-                    } else if (isSpace(c)) {
+                    } else if (isSpaceOrLineBreak(c)) {
                         state = WAIT_END_TAG_CLOSE;
                     } else if (GT == c) {
                         state = CLOSE_BRACKET;
                     }
                     break;
                 case WAIT_END_TAG_CLOSE:
-                    if (isSpace(c)) { //loop
+                    if (isSpaceOrLineBreak(c)) { //loop
 
                     } else if (GT == c) {
                         state = CLOSE_BRACKET;
